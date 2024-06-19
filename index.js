@@ -1,5 +1,6 @@
 const redux = require('redux')
 const createStore= redux.legacy_createStore
+const combineReducers= redux.combineReducers
 
 
 const CAKE_ORDERED = "CAKE_ORDERED";
@@ -43,16 +44,18 @@ const restockCake = (quantity) => {
       };
     };
   
-const initstate={
-    numOfCakes:10,
+const initIcecreamState={
     numOfIcecreams:25,
+}
+const initCakeState={
+    numOfCakes:10,
 }
 
 // a reducer is a function that defines what happens 
 // to store when action is run. one of the argument 
  
 
-const reducer=(state=initstate,action)=>{ //is the initial state of the store and the other one is action.
+const cakeReducer=(state=initCakeState,action)=>{ //is the initial state of the store and the other one is action.
     switch(action.type){
         case CAKE_ORDERED:
             return {  
@@ -64,6 +67,11 @@ const reducer=(state=initstate,action)=>{ //is the initial state of the store an
                 ...state,
                 numOfCakes:state.numOfCakes+action.payload
             }
+        default: return state    
+    }
+} 
+const iceCreamReducer=(state=initIcecreamState,action)=>{ //is the initial state of the store and the other one is action.
+    switch(action.type){
         case ICECREAM_ORDERED:
             return {
                 ...state,
@@ -78,7 +86,14 @@ const reducer=(state=initstate,action)=>{ //is the initial state of the store an
         default: return state    
     }
 } 
- const store= createStore(reducer) // the createStore has reducer as parameter
+
+const rootReducer= combineReducers({
+    cake:cakeReducer,
+    iceCream:iceCreamReducer
+})
+
+
+ const store= createStore(rootReducer) // the createStore has reducer as parameter
  console.log("Initial State",store.getState()) 
 
  const unsubscribe=store.subscribe(()=>{
