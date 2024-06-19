@@ -3,15 +3,25 @@ const createStore= redux.legacy_createStore
 
 
 const CAKE_ORDERED = "CAKE_ORDERED";
+const CAKE_RESTOKCED="CAKE_RESTOKCED"
 
-const orderCake = () => {
+const orderCake = (quantity) => {
   //the action creator function...
   return {
     //...returns an action
     type: CAKE_ORDERED,
-    quantity: 1,
+    quantity: quantity,
   };
 };
+
+const restockCake = (quantity) => {
+    //the action creator function...
+    return {
+      //...returns an action
+      type: CAKE_RESTOKCED,
+      quantity: quantity,
+    };
+  };
 
 const initstate={
     numOfCakes:10
@@ -26,8 +36,14 @@ const reducer=(state=initstate,action)=>{ //is the initial state of the store an
         case CAKE_ORDERED:
             return {  
                 ...state,  // it return the new store
-                numOfCakes:state.numOfCakes-1
+                numOfCakes:state.numOfCakes-action.quantity
             }
+        case CAKE_RESTOKCED:
+            return {
+                ...state,
+                numOfCakes:state.numOfCakes+action.quantity
+            }
+
         default: return state    
     }
 } 
@@ -38,8 +54,10 @@ const reducer=(state=initstate,action)=>{ //is the initial state of the store an
     console.log('Updated State', store.getState())
  })
 
- store.dispatch(orderCake())
- store.dispatch(orderCake())
- store.dispatch(orderCake())
+ store.dispatch(orderCake(1))
+ store.dispatch(orderCake(1))
+ store.dispatch(orderCake(2))
+ store.dispatch(restockCake(1))
 unsubscribe()
+
 
