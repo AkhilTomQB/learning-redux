@@ -1,7 +1,8 @@
 const redux = require('redux')
 const createStore= redux.legacy_createStore
 const combineReducers= redux.combineReducers
-
+const logger= require("redux-logger").createLogger()
+const applyMiddleware= redux.applyMiddleware
 
 const CAKE_ORDERED = "CAKE_ORDERED";
 const CAKE_RESTOCKED="CAKE_RESTOCKED"
@@ -93,11 +94,11 @@ const rootReducer= combineReducers({
 })
 
 
- const store= createStore(rootReducer) // the createStore has reducer as parameter
+ const store= createStore(rootReducer,applyMiddleware(logger)) // the createStore has reducer as parameter, middleware used here is logger. we can add more if needed
  console.log("Initial State",store.getState()) 
 
  const unsubscribe=store.subscribe(()=>{
-    console.log('Updated State', store.getState())
+    // console.log('Updated State', store.getState()) logger handles this
  })
 
  store.dispatch(orderCake(1))
